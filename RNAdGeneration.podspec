@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'AdGeneration'
   s.dependency 'React'
-  s.dependency 'yoga'
+  s.dependency 'Yoga'
   #s.dependency "others"
 end
 
