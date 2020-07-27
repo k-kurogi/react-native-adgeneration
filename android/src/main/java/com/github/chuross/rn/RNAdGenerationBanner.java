@@ -2,7 +2,7 @@ package com.github.chuross.rn;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.Arguments;
