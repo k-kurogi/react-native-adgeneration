@@ -14,6 +14,9 @@
 @interface RNAdGenerationBanner() <ADGManagerViewControllerDelegate>
 
 @property (nonatomic) ADGManagerViewController *adg;
+@property (weak, nonatomic) IBOutlet UIView *adView;
+@property (nonatomic, weak) UIViewController *rootViewController;
+@property (nonatomic, copy) NSString *locationid;
 
 @end
 
@@ -45,10 +48,12 @@
     if ([self.bannerType isEqualToString:@"sp"]) {
         [params setObject:@(kADG_AdType_Sp) forKey:@"adtype"];
         event = @{ @"width": @(kADGAdSize_Sp_Width), @"height": @(kADGAdSize_Sp_Height) };
+        self.adg = [[ADGManagerViewController alloc] initWithLocationID:_locationId adType:kADG_AdType_Sp rootViewController:_rootViewController];
     }
     if ([self.bannerType isEqualToString:@"rect"]) {
         [params setObject:@(kADG_AdType_Rect) forKey:@"adtype"];
         event = @{ @"width": @(kADGAdSize_Rect_Width), @"height": @(kADGAdSize_Rect_Height) };
+        self.adg = [[ADGManagerViewController alloc] initWithLocationID:_locationId adType:kADG_AdType_Rect rootViewController:_rootViewController];
     }
     if ([self.bannerType isEqualToString:@"large"]) {
         [params setObject:@(kADG_AdType_Large) forKey:@"adtype"];
@@ -63,7 +68,8 @@
         self.onMeasure(event);
     }
     
-    self.adg = [[ADGManagerViewController new] initWithAdParams:params adView:self];
+    NSLog(@"Succesed to receive an ad.");
+    [self.adg addAdContainerView:self];
     self.adg.delegate = self;
     [self.adg loadRequest];
 }
