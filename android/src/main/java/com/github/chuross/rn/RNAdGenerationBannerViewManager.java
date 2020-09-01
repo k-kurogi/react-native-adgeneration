@@ -69,7 +69,12 @@ public class RNAdGenerationBannerViewManager extends ViewGroupManager<RNAdGenera
     public void setBannerType(RNAdGenerationBanner view, String bannerType) {
         view.setBannerType(bannerType);
     }
-
+    
+    @ReactProp(name = "screenWidth")
+    public void setScreenWidth(RNAdGenerationBanner view, int screenWidth) {
+        view.setScreenWidth(screenWidth);
+    }
+    
     @Override
     public void addView(RNAdGenerationBanner parent, View child, int index) {
         throw new UnsupportedOperationException("RNAdGenerationBanner not allow children.");
