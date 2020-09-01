@@ -52,6 +52,7 @@ import { AdGenerationBanner } from 'react-native-adgeneration';
 <AdGenerationBanner
   locationId='your_ad_id'
   bannerType='sp' // sp|rect|tablet|large
+  screenWidth={Width}
 />
 ```
 
