@@ -20,6 +20,8 @@ public class RNAdGenerationBanner extends FrameLayout {
     public static final String EVENT_TAG_ON_MEASURE = "onMeasure";
     private ReactContext reactContext;
     private ADG adg;
+    private int screenWidth = 0;
+    private String bannerType;
     private Runnable measureRunnable = new Runnable() {
         @Override
         public void run() {
@@ -29,6 +31,7 @@ public class RNAdGenerationBanner extends FrameLayout {
             layout(getLeft(), getTop(), getRight(), getBottom());
         }
     };
+    
 
     public RNAdGenerationBanner(@NonNull Context context) {
         super(context);
@@ -37,7 +40,6 @@ public class RNAdGenerationBanner extends FrameLayout {
         setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
         adg = new ADG(getContext());
-        refreshBannerLayoutParams(ADG.AdFrameSize.SP);
 
         adg.setAdListener(new ADGListener() {
             @Override
@@ -77,11 +79,18 @@ public class RNAdGenerationBanner extends FrameLayout {
      * @param bannerType sp|rect|tablet|large
      */
     public void setBannerType(String bannerType) {
-        ADG.AdFrameSize frameSize = bannerType != null ? ADG.AdFrameSize.valueOf(bannerType.toUpperCase()) : null;
-        if (frameSize == null) return;
-
-        adg.setAdFrameSize(frameSize);
-        refreshBannerLayoutParams(frameSize);
+        this.bannerType = bannerType;
+        
+        if(this.screenWidth != 0){
+            setBannerScale();
+        }
+    }
+    /**
+     * @param width screenWidth
+     */
+    public void setScreenWidth(int width) {
+        this.screenWidth = width;
+        setBannerScale();
     }
 
     public void load() {
@@ -91,6 +100,31 @@ public class RNAdGenerationBanner extends FrameLayout {
     public void destroy() {
         if (adg != null) adg.stop();
         adg = null;
+    }
+
+    private void setBannerScale(){
+        float bannerWidth = 320;
+        float bannerHeight = 50;
+
+        if (this.bannerType.equalsIgnoreCase("SP")){
+            bannerWidth = 320;
+            bannerHeight = 50;
+        }else if(this.bannerType.equalsIgnoreCase("RECT")){
+            bannerWidth = 300;
+            bannerHeight = 250;
+        }else if(this.bannerType.equalsIgnoreCase("TABLET")){
+            bannerWidth = 728;
+            bannerHeight = 90;
+        }else if(this.bannerType.equalsIgnoreCase("LARGE")){
+            bannerWidth = 320;
+            bannerHeight = 100;
+        }
+        float scale = this.screenWidth / bannerWidth;
+        float height = bannerHeight *  scale;
+        int intHeight = (int)height;
+        adg.setAdFrameSize(ADG.AdFrameSize.FREE.setSize(this.screenWidth, intHeight));
+        adg.setAdScale(scale);
+        refreshBannerLayoutParams(ADG.AdFrameSize.FREE);
     }
 
     private Rect getBannerRect(ADG.AdFrameSize frameSize) {
