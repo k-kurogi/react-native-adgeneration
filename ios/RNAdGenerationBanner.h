@@ -12,6 +12,7 @@
 @interface RNAdGenerationBanner : UIView
 
 @property (nonatomic, copy) NSString *locationId;
+@property (nonatomic, copy) NSNumber *screenWidth;
 @property (nonatomic, copy) NSString *bannerType;
 @property (nonatomic, copy) RCTDirectEventBlock onMeasure;
 
