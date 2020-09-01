@@ -54,6 +54,7 @@ AdGenerationBanner.propTypes = {
   // sp|rect|large|tablet
   bannerType: PropTypes.string,
   
+  screenWidth: PropTypes.number,
   // layout measured event
   // (width, height)
   onMeasure: PropTypes.func,
