@@ -34,11 +34,20 @@
 
 - (void)load
 {
+    int intWidth = 320;
+    int intHeight = 50;
+    float scale = 1.0;
+    float height = 50;
     if (self.locationId == nil) {
         return;
     }
     if (self.bannerType == nil) {
         return;
+    }
+    if (self.screenWidth == nil) {
+        return;
+    }else{
+        intWidth = [self.screenWidth intValue];
     }
     
     NSMutableDictionary *params = @{}.mutableCopy;
@@ -47,28 +56,39 @@
     NSDictionary *event;
     if ([self.bannerType isEqualToString:@"sp"]) {
         [params setObject:@(kADG_AdType_Sp) forKey:@"adtype"];
-        event = @{ @"width": @(kADGAdSize_Sp_Width), @"height": @(kADGAdSize_Sp_Height) };
-        self.adg = [[ADGManagerViewController alloc] initWithLocationID:_locationId adType:kADG_AdType_Sp rootViewController:_rootViewController];
+        scale = (float)intWidth / 320;
+        height = 50 * scale;
+        intHeight = (int) height;
     }
     if ([self.bannerType isEqualToString:@"rect"]) {
         [params setObject:@(kADG_AdType_Rect) forKey:@"adtype"];
-        event = @{ @"width": @(kADGAdSize_Rect_Width), @"height": @(kADGAdSize_Rect_Height) };
-        self.adg = [[ADGManagerViewController alloc] initWithLocationID:_locationId adType:kADG_AdType_Rect rootViewController:_rootViewController];
+        scale = (float)intWidth / 300;
+        height = 250 * scale;
+        intHeight = (int) height;
     }
     if ([self.bannerType isEqualToString:@"large"]) {
         [params setObject:@(kADG_AdType_Large) forKey:@"adtype"];
-        event = @{ @"width": @(kADGAdSize_Large_Width), @"height": @(kADGAdSize_Large_Height) };
+        scale = (float)intWidth / 320;
+        height = 100 * scale;
+        intHeight = (int) height;
     }
     if ([self.bannerType isEqualToString:@"tablet"]) {
         [params setObject:@(kADG_AdType_Tablet) forKey:@"adtype"];
-        event = @{ @"width": @(kADGAdSize_Tablet_Width), @"height": @(kADGAdSize_Tablet_Height) };
+        scale = (float)intWidth / 728;
+        height = 90 * scale;
+        intHeight = (int) height;
     }
     
+    event = @{ @"width": @(intWidth), @"height": @(intHeight) };
     if (self.onMeasure) {
         self.onMeasure(event);
     }
     
     NSLog(@"Succesed to receive an ad.");
+    
+    self.adg = [[ADGManagerViewController new] initWithLocationID:_locationId adType:kADG_AdType_Free rootViewController:_rootViewController];
+    self.adg.adSize = CGSizeMake(intWidth, intHeight);
+    self.adg.adScale = scale;
     [self.adg addAdContainerView:self];
     self.adg.delegate = self;
     [self.adg loadRequest];
